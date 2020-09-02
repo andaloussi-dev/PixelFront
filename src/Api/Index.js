@@ -5,11 +5,12 @@ export const login=async data=>{
 
 export const getAllIssues = async ()=>{
     try {
-        console.log(localStorage.getItem('User'));
         const {data} = await Repository.get('/customer/issues');
+        console.log(data);
         return data;
     } catch (error) {
-        
+        window.location.reload();
+        return [];
     }
 }
 

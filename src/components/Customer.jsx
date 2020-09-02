@@ -1,6 +1,9 @@
 import React,{useEffect,useState} from 'react';
 import {getAllIssues,createIssue,deleteIssue} from '../Api/Index';
 import Issue from './Issue'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import {
     Button,
     Card,
@@ -32,6 +35,54 @@ const Customer = () => {
   const back=()=>{
     setIsClicked(1);
   }
+
+
+  const notification=(type,msg)=>{
+    if(type==="error"){
+        toast.error(msg, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            });
+    }
+    else if (type==="good") {
+        toast.success(msg, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            });
+    } else toast(msg);
+
+}
+
+const deleteIssuefx=async id=>{
+  await deleteIssue(id);
+  setFetchedData(await getAllIssues())
+  notification("good",`🚀 issue  was deleted successfully`);
+
+}
+
+const AddIssue= async name=>{
+  if (title==="") {
+      notification("error",'⚠️ Please insert a title !');
+  }
+  else{
+     await createIssue({title,content,user_id});
+     setFetchedData(await getAllIssues())
+      notification("good",`🚀 ${title} was added successfully`);
+  }
+  
+}
+
+
   const user_id=localStorage.getItem('Id');
    useEffect(()=>{
       const fetchData=async()=>{
@@ -81,7 +132,7 @@ const Customer = () => {
                            <DropdownMenu aria-labelledby="dropdownMenuLink" center>
                                <DropdownItem
                                    color="red"
-                                   onClick={ async ()=>{await deleteIssue(issue.id);setFetchedData(await getAllIssues())}}
+                                   onClick={ ()=>{deleteIssuefx(issue.id)}}
                                >
                                    Delete
                                </DropdownItem>
@@ -124,7 +175,7 @@ const Customer = () => {
                  </Form>
                </CardBody>
                <CardFooter>
-                 <Button  onClick={async()=>{createIssue({title,content,user_id});setFetchedData(await getAllIssues())}}  className="btn-fill" color="info" type="button">
+                 <Button  onClick={async()=>{ AddIssue();}}  className="btn-fill" color="info" type="button">
                    Save
                  </Button>
                </CardFooter>
@@ -134,6 +185,9 @@ const Customer = () => {
          </Row>
            :  <Issue back={back} issueId={issueId}></Issue>
            }
+
+    <ToastContainer />
+
         </div>
     )
 }

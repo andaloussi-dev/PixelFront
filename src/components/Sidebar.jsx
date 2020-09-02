@@ -6,7 +6,7 @@ function Sidebar(props) {
         <div className="sidebar-wrapper">
              <ul className="nav">
              <li class="active ">
-            <a href="./dashboard.html">
+            <a >
               <i class="tim-icons icon-chart-pie-36"></i>
               <p>Dashboard</p>
             </a>

@@ -20,12 +20,15 @@ function Login() {
    
     const [email,setEmail]=useState('');
     const [password,setPassword]=useState('');
+    const [logedin,setLogedIn]=useState(0);
     const history = useHistory();
 
     const login= async()=>{
         let lg= await authValidation({email,password});
         if(lg.status){
-            localStorage.setItem('user',lg.data);
+            localStorage.setItem('Token',lg.data.access_token);
+            localStorage.setItem('Id',lg.data.user.id);
+            localStorage.setItem('User',lg.data);
             history.push('/home');
         }else{
             alert(lg.message);
@@ -91,10 +94,6 @@ function Login() {
             onChange={(e)=>setPassword(e.target.value)}
 
           />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
           <Button
             type="button"
             fullWidth
@@ -105,18 +104,7 @@ function Login() {
           >
             Sign In
           </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid>
+    
         </form>
       </div>
 
